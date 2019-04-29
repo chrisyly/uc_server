@@ -8,17 +8,16 @@
     "start": "nodemon main_server.js"
   },
   "author": "Liyu Ying",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "nodemon": "^1.14.7"
+    "nodemon": "*"
   },
   "dependencies": {
-    "express": "^4.16.4",
-    "papaparse": "^4.6.3",
-    "r-script": "0.0.3",
-    "sleep": "^5.2.4",
-    "update": "^0.7.4",
-    "web-terminal": "^0.7.0",
-    "xhr2": "^0.1.4"
+    "express": "*",
+    "papaparse": "*",
+    "r-script": "*",
+    "sleep": "^6.0.0",
+    "update": "*",
+    "xhr2": "*"
   }
 }
