@@ -16,11 +16,14 @@ module.exports = function(app) {
 
   // main routes
   app.route('/wudb')
-    .get(main_route.list_all_tasks)
-    .post(main_route.create_a_task);
+    .get(main_route.get_stations)
+    .post(main_route.add_station);
 
-  app.route('/wudb/:taskId')
-    .get(main_route.read_a_task)
-    .put(main_route.update_a_task)
-    .delete(main_route.delete_a_task);
+  app.route('/wudb/:stationId')
+    .get(main_route.find_station)
+    .put(main_route.update_station)
+    .delete(main_route.delete_a_station);
+
+  app.route('/r')
+    .get(main_route.calculate_prediction);
 };

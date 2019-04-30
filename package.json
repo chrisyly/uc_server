@@ -9,15 +9,13 @@
   },
   "author": "Liyu Ying",
   "license": "MIT",
-  "devDependencies": {
+  "devdependencies": {
     "nodemon": "*"
   },
   "dependencies": {
     "express": "*",
-    "papaparse": "*",
+    "mongoose": "*",
     "r-script": "*",
-    "sleep": "^6.0.0",
-    "update": "*",
-    "xhr2": "*"
+    "axios": "*"
   }
 }
