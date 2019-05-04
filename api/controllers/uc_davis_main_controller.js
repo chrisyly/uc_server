@@ -10,11 +10,7 @@ const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/',
 
 // ============== Basic api beginning ================= //
 exports.get_stations = function(req, res) {
-  db.find({}, function(err, result) {
-    if (err)
-      res.send(err);
-    res.json(result);
-  });
+  find_station(req, res)  
 };
 
 exports.add_station = function(req, res) {
@@ -27,13 +23,27 @@ exports.add_station = function(req, res) {
   });
 };
 
-exports.find_station = function(req, res) {
-  if (req.params.name) {
+exports.find_by_id = function(req, res) {
+  db.find({_id:req.params.stationId}, function(err, result) {
+    if (err)
+      res.send(err);
+    res.json(result);
+  });
+};
+
+function find_station(req, res) {
+  if (req.query.name) {
     find_by_name(req, res);
-  } else if (req.param.zipcode) {
+  } else if (req.query.zipcode) {
     find_by_zipcode(req, res);
+  } else {
+    db.find({}, function(err, result) {
+      if (err)
+        res.send(err);
+      res.json(result);
+    });
   }
-}
+};
 
 function find_by_name(req, res) {
   db.find({name:req.query.name}, function(err, result) {
@@ -53,7 +63,6 @@ function find_by_zipcode(req, res) {
 
 exports.update_station = function(req, res) {
   console.log(req.params.stationId)
-  console.log(req.body)
   db.findOneAndUpdate({_id: req.params.stationId}, req.body, {new: true}, function(err, result) {
     if (err)
       res.send(err);
@@ -64,7 +73,7 @@ exports.update_station = function(req, res) {
 
 exports.delete_a_station = function(req, res) {
   db.remove({
-    _id: req.params.taskId
+    _id: req.params.stationId
   }, function(err, result) {
     if (err)
       res.send(err);

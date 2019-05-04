@@ -20,7 +20,7 @@ module.exports = function(app) {
     .post(main_route.add_station);
 
   app.route('/wudb/:stationId')
-    .get(main_route.find_station)
+    .get(main_route.find_by_id)
     .put(main_route.update_station)
     .delete(main_route.delete_a_station);
 
