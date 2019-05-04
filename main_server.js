@@ -1,4 +1,5 @@
 const express = require('express'),
+  cors = require('cors'),
   server = express(),
   mongoose = require('mongoose'),
   Model = require('./api/models/uc_davis_main_model'), //created model loading here
@@ -13,8 +14,7 @@ const express = require('express'),
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/UcDavisdb', {useNewUrlParser: true}); 
 
-//server.use(bodyParser.urlencoded({ extended: true }));
-//server.use(bodyParser.json());
+server.use(cors());
 
 const uc_routes = require('./api/routes/uc_davis_main_route'); //importing route
 uc_routes(server); //register the route

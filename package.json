@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "express": "*",
+    "cors": "*",
     "mongoose": "*",
     "r-script": "*",
     "axios": "*"

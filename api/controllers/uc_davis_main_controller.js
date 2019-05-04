@@ -108,30 +108,31 @@ exports.calculate_prediction = async function(req, res) {
   }
   if (typeof req.query.startDate !== undefined) {
     startDate = req.query.startDate;
-    startMonth = Number(startDate.substring(0,2));
-    startDay = Number(startDate.substring(3,5));
-    startYear = Number(startDate.substring(6,10));
+    startMonth = Number(startDate.substring(5,7));
+    startDay = Number(startDate.substring(8,10));
+    startYear = Number(startDate.substring(0,4));
   } else {
     res.json({error: "Invalid Start Date"});
 	return;
   }
   if (typeof req.query.endDate !== undefined) {
     endDate = req.query.endDate;
-    endMonth = Number(endDate.substring(0,2));
-	endDay = Number(endDate.substring(3,5));
-	endYear = Number(endDate.substring(6,10));
+    endMonth = Number(endDate.substring(5,7));
+	endDay = Number(endDate.substring(8,10));
+	endYear = Number(endDate.substring(0,4));
   } else {
     res.json({error: "Invalid End Date"});
 	return;
   }
 
   jsonR = await getWWOData(wwoQuery);
-  console.log(jsonR)
-
+  //console.log(startMonth)
+  //console.log(startDay)
+  //console.log(startYear)
   var begin = new Date(startYear, startMonth-1, startDay);
   var current = new Date(endYear, endMonth-1, endDay);
   var currentDays = Math.round((current.getTime() - begin.getTime()) / oneDay);
-  var currentTU = getCurrentTU(startMonth - 1, startDay, current.getMonth(), current.getDate(), jsonR);
+  var currentTU = getCurrentTU(startYear, startMonth - 1, startDay, (current.getMonth() + (endYear - startYear) * 12), current.getDate(), jsonR);
   var predict14Days = [];
   if (current < jsonR.data.weather[0].date) {
     predict14Days = get14DaysTUHistory(currentTU, current.getMonth(), jsonR)
@@ -141,7 +142,7 @@ exports.calculate_prediction = async function(req, res) {
   var pred14DaysVolume = get14DaysAnalysis(predict14Days, 5.9113153, 0.9917134);
   var pred14DaysEmbyro = get14DaysAnalysis(predict14Days, 35.42551, 0.996854183);
   var pred14DaysFirmness = get14DaysAnalysis(predict14Days, 6.00497953, 0.997631460);
-  console.log("\nTotal TU: " + totalTU + ";\nDays until today: " + currentDays + ";\nCurrent TU: " + currentTU + ";\nStart Date: " + startDate + ";\nStation Name: " + stationName + ";\nStation zip: " + zipcode);
+  console.log("\nTotal TU: " + totalTU + "\nDays until today: " + currentDays + "\nCurrent TU: " + currentTU + "\nStart Date: " + startDate + "\nEnd Date: " + endDate + "\nStation Name: " + stationName + "\nStation zip: " + zipcode);
   console.log("14 days TU prediction from today:\n" + predict14Days);
   console.log("14 days volume prediction from today:\n" + pred14DaysVolume);
   console.log("14 days embyro prediction from today:\n" + pred14DaysEmbyro);
@@ -180,16 +181,16 @@ function ctotu(ctemp) {
   return (ctemp - 7.0);
 }
 
-function getCurrentTU(startMonth, startDay, currentMonth, currentDay, jsonR) {
+function getCurrentTU(startYear, startMonth, startDay, currentMonth, currentDay, jsonR) {
   var currentTU = 0;
   for (var i = startMonth; i <= currentMonth; i++) {
-    var avgMonthTemp = Math.round(((Number(jsonR.data.ClimateAverages[0].month[i].avgMinTemp) + Number(jsonR.data.ClimateAverages[0].month[i].absMaxTemp)) / 2 - 7) * 100) / 100;
+    var avgMonthTemp = Math.round(((Number(jsonR.data.ClimateAverages[0].month[i % 12].avgMinTemp) + Number(jsonR.data.ClimateAverages[0].month[i % 12].absMaxTemp)) / 2 - 7) * 100) / 100;
 	var monthDays = 0;
-	if (i == 0 || i == 2 || i == 4 || i == 6 || i == 7 || i == 9 || i == 11) {
+	if ((i % 12) == 0 || (i % 12)== 2 || (i % 12) == 4 || (i % 12) == 6 || (i % 12) == 7 || (i % 12) == 9 || (i % 12) == 11) {
       monthDays = 31;
-	} else if (i == 1 && (startYear % 4 == 0)) {
+	} else if ((i % 12)== 1 && (startYear % 4 == 0)) {
       monthDays = 29;
-	} else if (i == 1 && (startYear % 4 != 0)) {
+	} else if ((i % 12) == 1 && (startYear % 4 != 0)) {
       monthDays = 28;
 	} else {
 	  monthDays = 30;
