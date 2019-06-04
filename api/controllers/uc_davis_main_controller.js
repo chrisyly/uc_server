@@ -135,9 +135,6 @@ exports.calculate_prediction = async function(req, res) {
   }
 
   jsonR = await getWWOData(wwoQuery);
-  //console.log(startMonth)
-  //console.log(startDay)
-  //console.log(startYear)
   var begin = new Date(startYear, startMonth-1, startDay);
   var current = new Date(endYear, endMonth-1, endDay);
   var currentDays = Math.round((current.getTime() - begin.getTime()) / oneDay);
