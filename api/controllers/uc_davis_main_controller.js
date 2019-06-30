@@ -5,7 +5,7 @@ const mongoose = require('mongoose'),
   axios = require('axios');
 
 const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/',
-  _WorldWeatherOnline_Key = '2ca2105759cd4590890175217192204',
+  _WorldWeatherOnline_Key = '1f5fa93d11de4c4cb62174906191606',
   oneDay = 86400000;
 
 // ============== Basic api beginning ================= //
@@ -134,7 +134,7 @@ exports.calculate_prediction = async function(req, res) {
 	return;
   }
 
-  jsonR = await getWWOData(wwoQuery);
+  jsonR = await getWWOData(wwoQuery); //NOTE fetch all WWOData once per day???
   var begin = new Date(startYear, startMonth-1, startDay);
   var current = new Date(endYear, endMonth-1, endDay);
   var currentDays = Math.round((current.getTime() - begin.getTime()) / oneDay);
@@ -238,4 +238,12 @@ function get14DaysAnalysis(TU, b2, b3, Asym = 100) {
     result.push(Math.round(Number((Asym * Math.exp((-b2) * (b3 ** TU[i]))).toFixed(4)) * 100) / 100);
   }
   return result;
+}
+
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
 }
