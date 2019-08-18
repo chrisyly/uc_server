@@ -26,4 +26,7 @@ module.exports = function(app) {
 
   app.route('/r')
     .get(main_route.calculate_prediction);
+
+  app.route('/log')
+    .post(main_route.message_service);
 };
