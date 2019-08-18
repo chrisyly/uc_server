@@ -1,18 +1,71 @@
 'use strict';
 
-const mongoose = require('mongoose'),
-  db = mongoose.model('uc_davis_master'), // mongoDB dependency
-  axios = require('axios');
+/* \brief UC Davis main controller
+*
+*  UC Daivs Main Controller contains:
+*  1. The REST API of database methods
+*  2. The REST API of calling Algorithm function
+*  3. The tool functions support 1 & 2
+*
+*  @director
+*  @project_owner
+*  @algorithm_developer
+*  @developer Liyu Ying, lying@ucdavis.edu
+*/
 
-const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/',
-  _WorldWeatherOnline_Key = '1f5fa93d11de4c4cb62174906191606',
-  oneDay = 86400000;
+const mongoose = require('mongoose'), /// mongoose dependency
+  db = mongoose.model('uc_davis_master'), /// mongoDB model
+  axios = require('axios'), /// axios dependency
+  fs = require('fs'); /// Javascript file system dependency
+
+const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/', /// World Weather Online API URL
+  _WorldWeatherOnline_Key = '1f5fa93d11de4c4cb62174906191606', /// World Weather Online API Key
+  oneDay = 86400000; /// Million seconds of one day
+
+/* \brief [Utility] A utility collection
+*
+*  @return method The Utility functions collection object
+*/
+var utility = (function() {
+  var method = {};
+  method.writeToFile = function (path = "/var/www/html/uc_davis/log/", fileName
+= "",  message = "") {
+    var currentDate = new Date();
+    var date = (currentDate.getMonth() + 1) + "-" + currentDate.getDate() + "-"
++ currentDate.getFullYear();
+        var time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":"
+ + currentDate.getSeconds() + "." + currentDate.getMilliseconds()
+    try {
+      fs.appendFileSync(path + date + "_" + fileName, "[" + time + "] " + messag
+e);
+        } catch (err) {
+      fs.appendFileSync(path + 'system.log', "[" + time + "] " + err);// TODO
+        }
+  }
+  return method;
+});
 
 // ============== Basic api beginning ================= //
+/* \brief [GET request] Getting the station from database by either station name or zipcode
+*
+*  GET REST API, send the response with station JSON based on request parameters
+*  Calling find_station(req, res) to read req object and based on parameters looking for
+*  "name" and then "zipcode" to load station in database
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 exports.get_stations = function(req, res) {
   find_station(req, res)  
 };
 
+/* \brief [POST request] Adding a new station based on req parameters
+*
+*  POST REST API, send the response with result JSON after adding station to database
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 exports.add_station = function(req, res) {
   var station = new db(req.query);
   console.log(req.query.name);
@@ -23,6 +76,13 @@ exports.add_station = function(req, res) {
   });
 };
 
+/* \brief [GET request] Getting the station based on the _id recorded in database
+*
+*  GET REST API, send the response with the station JSON based on _id parameter in req
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 exports.find_by_id = function(req, res) {
   db.find({_id:req.params.stationId}, function(err, result) {
     if (err)
@@ -31,6 +91,15 @@ exports.find_by_id = function(req, res) {
   });
 };
 
+/* \brief database tool function, send the response with all found stations
+*
+*  Calling find_by_name if name parameter is provided
+*  Else calling find_by_zipcode if zipcode parameter is provided
+*  If no parameter of name nor zipcode defined, return all station
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 function find_station(req, res) {
   if (req.query.name) {
     find_by_name(req, res);
@@ -45,6 +114,14 @@ function find_station(req, res) {
   }
 };
 
+/* \brief database tool function, send the response with stations found by name
+*
+*  Find all matched station in database by station name provided
+*  Send the response with the staiton JSON object based on name paramter in req
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 function find_by_name(req, res) {
   db.find({name:req.query.name}, function(err, result) {
     if (err)
@@ -53,6 +130,14 @@ function find_by_name(req, res) {
   });
 };
 
+/* \brief database tool function, send the response with stations found by zipcode
+*
+*  Find all matched station in database by station zipcode provided
+*  Send the response with the staiton JSON object based on zipcode paramter in req
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 function find_by_zipcode(req, res) {
   db.find({zipcode:req.query.zipcode}, function(err, result) {
     if (err)
@@ -61,6 +146,14 @@ function find_by_zipcode(req, res) {
   });
 };
 
+/* \brief [POST request] Update a station information based on the req stationId parameter
+*
+*  Find the station by _id and update the station information based on req parameter
+*  Send the response with return code from database
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 exports.update_station = function(req, res) {
   console.log(req.params.stationId)
   db.findOneAndUpdate({_id: req.params.stationId}, req.body, {new: true}, function(err, result) {
@@ -70,7 +163,14 @@ exports.update_station = function(req, res) {
   });
 };
 
-
+/* \brief [DELETE request] Delete a station based on the req stationId parameter
+*
+*  Find the station by _id and delete the station information from database based on req stationId parameter
+*  Send the response with return code from database
+*
+*  @param req HTTP request object
+*  @param res HTTP response object
+*/
 exports.delete_a_station = function(req, res) {
   db.remove({
     _id: req.params.stationId
@@ -79,6 +179,10 @@ exports.delete_a_station = function(req, res) {
       res.send(err);
     res.json({ "message": "Task successfully deleted" });
   });
+};
+
+exports.message_service = function(req, res) {
+  // TODO
 };
 // ================ Basic api ends ================ //
 
