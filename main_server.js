@@ -6,7 +6,7 @@ const express = require('express'),
   //bodyParser = require('body-parser'),
   port = 3000,
   port_test = 8080,
-  host_ip = '45.33.57.20',
+  host_ip = '0.0.0.0',
   host_local_ip = '127.0.0.1';
 
 

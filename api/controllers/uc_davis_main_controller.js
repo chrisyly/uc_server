@@ -28,16 +28,12 @@ const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/',
 */
 var utility = (function() {
   var method = {};
-  method.writeToFile = function (path = "/var/www/html/uc_davis/log/", fileName
-= "",  message = "") {
+  method.writeToFile = function (path = "/var/www/html/uc_davis/log/", fileName = "",  message = "") {
     var currentDate = new Date();
-    var date = (currentDate.getMonth() + 1) + "-" + currentDate.getDate() + "-"
-+ currentDate.getFullYear();
-        var time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":"
- + currentDate.getSeconds() + "." + currentDate.getMilliseconds()
+    var date = (currentDate.getMonth() + 1) + "-" + currentDate.getDate() + "-" + currentDate.getFullYear();
+        var time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds() + "." + currentDate.getMilliseconds()
     try {
-      fs.appendFileSync(path + date + "_" + fileName, "[" + time + "] " + messag
-e);
+      fs.appendFileSync(path + date + "_" + fileName, "[" + time + "] " + message);
         } catch (err) {
       fs.appendFileSync(path + 'system.log', "[" + time + "] " + err);// TODO
         }
