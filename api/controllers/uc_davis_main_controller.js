@@ -19,7 +19,7 @@ const mongoose = require('mongoose'), /// mongoose dependency
   fs = require('fs'); /// Javascript file system dependency
 
 const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/', /// World Weather Online API URL
-  _WorldWeatherOnline_Key = '1f5fa93d11de4c4cb62174906191606', /// World Weather Online API Key
+  _WorldWeatherOnline_Key = 'bdab61facf7f422f88e212206192208', /// World Weather Online API Key
   oneDay = 86400000; /// Million seconds of one day
 
 /* \brief [Utility] A utility collection
