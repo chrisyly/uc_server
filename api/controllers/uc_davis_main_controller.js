@@ -177,6 +177,13 @@ exports.delete_a_station = function(req, res) {
   });
 };
 
+
+
+/* \brief [Message services] Passing messages between user and server
+ *
+ * TODO TODO TODO
+ *
+ */
 exports.message_service = function(req, res) {
   // TODO
 };
