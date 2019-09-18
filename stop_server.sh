@@ -1,3 +1,3 @@
-#!/usr/bin/sh
+#!/bin/sh
 
-sudo killall -9 node
+screen -S uc_server -X quit

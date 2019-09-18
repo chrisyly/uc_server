@@ -9,8 +9,7 @@
   },
   "author": "Liyu Ying",
   "license": "MIT",
-  "devdependencies": {
-    "nodemon": "*"
+  "devDependencies": {
   },
   "dependencies": {
     "express": "*",

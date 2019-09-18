@@ -1,3 +1,3 @@
-#!/usr/bin/sh
+#!/bin/sh
 
 ps -aux | grep [m]ain_server
