@@ -9,13 +9,12 @@
   },
   "author": "Liyu Ying",
   "license": "MIT",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
-    "express": "*",
+    "axios": "*",
     "cors": "*",
-    "mongoose": "*",
-    "r-script": "*",
-    "axios": "*"
+    "express": "*",
+    "mongoose": "^5.7.0",
+    "r-script": "0.0.4"
   }
 }
