@@ -224,18 +224,20 @@ exports.calculate_prediction = async function(req, res) {
   }
   if (typeof req.query.startDate !== undefined) {
     startDate = req.query.startDate;
-    startMonth = Number(startDate.substring(5,7));
-    startDay = Number(startDate.substring(8,10));
-    startYear = Number(startDate.substring(0,4));
+    temp = startDate.split("-");
+    startMonth = Number(temp[1]);
+    startDay = Number(temp[2]);
+    startYear = Number(temp[0]);
   } else {
     res.json({error: "Invalid Start Date"});
 	return;
   }
   if (typeof req.query.endDate !== undefined) {
     endDate = req.query.endDate;
-    endMonth = Number(endDate.substring(5,7));
-	endDay = Number(endDate.substring(8,10));
-	endYear = Number(endDate.substring(0,4));
+    temp = endDate.split("-");
+    endMonth = Number(temp[1]);
+    endDay = Number(temp[2]);
+    endYear = Number(temp[0]);
   } else {
     res.json({error: "Invalid End Date"});
 	return;
