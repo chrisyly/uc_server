@@ -19,7 +19,7 @@ const mongoose = require('mongoose'), /// mongoose dependency
   fs = require('fs'); /// Javascript file system dependency
 
 const _WorldWeatherOnline_URL = 'http://api.worldweatheronline.com/premium/v1/', /// World Weather Online API URL
-  _WorldWeatherOnline_Key = 'bdab61facf7f422f88e212206192208', /// World Weather Online API Key
+  _WorldWeatherOnline_Key = 'bee48ac16d1540ec81e174220201401', /// World Weather Online API Key
   oneDay = 86400000; /// Million seconds of one day
 
 /* \brief [Utility] A utility collection
@@ -224,7 +224,7 @@ exports.calculate_prediction = async function(req, res) {
   }
   if (typeof req.query.startDate !== undefined) {
     startDate = req.query.startDate;
-    temp = startDate.split("-");
+    var temp = startDate.split("-");
     startMonth = Number(temp[1]);
     startDay = Number(temp[2]);
     startYear = Number(temp[0]);
@@ -234,7 +234,7 @@ exports.calculate_prediction = async function(req, res) {
   }
   if (typeof req.query.endDate !== undefined) {
     endDate = req.query.endDate;
-    temp = endDate.split("-");
+    var temp = endDate.split("-");
     endMonth = Number(temp[1]);
     endDay = Number(temp[2]);
     endYear = Number(temp[0]);
@@ -279,8 +279,9 @@ exports.calculate_prediction = async function(req, res) {
 // axios Http request
 // TODO add rejection handler
 async function getWWOData(query) {
+  console.log("Sending GET REQUEST: " + query);
   let res = await axios.get(query);
-  return res.data
+  return res.data;
 }
 
 // Math Functions

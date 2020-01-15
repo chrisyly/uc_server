@@ -1,3 +1,3 @@
 #!/bin/sh
 
-screen -S uc_server -X quit
+screen -S uc_server_main -X quit
